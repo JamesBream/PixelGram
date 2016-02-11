@@ -1,13 +1,2 @@
-# PaperLoop
-CS Team Project
-
-
-TBC...
-
-
-
-Getting Started
-
-pip install flask
-
-pip install flask-mysql
+# InstaDroid
+CS Team Project Instagram Clone for Android
