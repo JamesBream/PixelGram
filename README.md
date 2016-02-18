@@ -26,3 +26,5 @@ Finally, some utilities... (Yeah, we're getting there, almost I think.)
     - Install MySQL Workbench
 
 I honestly, think that's it. If you've cloned the repository from Github, you should be able to do `python app.py` in cmd in order to run the server. This will need restarting if you change the Python code but should be ok to leave running if you're working with anything else.
+
+Hey, I'm setting up this sh*t
