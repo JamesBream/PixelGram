@@ -1,13 +1,14 @@
 ##################
-# PaperLoop v0.1 #
+# PixelGram v0.1 #
 ##################
 # Execute to build initial database structures
 # Comment 
 
-CREATE DATABASE PaperLoop;
+CREATE DATABASE PixelGram;
 
-CREATE TABLE `PaperLoop`.`tbl_user` (
+CREATE TABLE `PixelGram`.`tbl_user` (
 	`user_id` BIGINT NULL AUTO_INCREMENT,
+    `user_name` VARCHAR(45) NULL,
 	`user_username` VARCHAR(45) NULL,
 	`user_password` VARCHAR(45) NULL,
 	PRIMARY KEY (`user_id`));
