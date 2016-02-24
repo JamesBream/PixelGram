@@ -4,13 +4,12 @@
 <head>
     <title>PixelGram</title>
     
-    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="../static/css/bootstrap.css" rel="stylesheet">
     
+    <!-- Bootstrap Jumbotron Template -->
     <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="../static/css/signup.css" rel="stylesheet">
-    <script src="../static/js/jquery-1.12.0.js"></script>
-    <script src="../static/js/signUp.js"></script>
-    
 </head>
     
 <body>
@@ -18,8 +17,8 @@
         <div class="header">
             <nav>
                 <ul class="nav nav-pills pull-right">
-                    <li role="presentation"><a href="main">Home</a></li>
-                    <li role="presentation"><a href="#">Sign In</a></li>
+                    <li role="presentation"><a href="/">Home</a></li>
+                    <li role="presentation"><a href="/showSignIn">Sign In</a></li>
                     <li role="presentation" class="active"><a href="#">Sign Up</a> </li>
                 </ul>
             </nav>
@@ -27,7 +26,7 @@
         </div>
         
         <div class="jumbotron">
-            <h1>PixelGram App</h1>
+            <h1>PixelGram</h1>
             <form class="form-signin">
                 <label for="inputName" class="sr-only">Name</label>
                 <input type="name" name="inputName" id="inputName" class="form-control" placeholder="Name" required autofocus>
@@ -45,5 +44,8 @@
         </footer>
     </div>
     
+    <!-- jQuery and custom JS -->
+    <script src="../static/js/jquery-1.12.0.js"></script>
+    <script src="../static/js/signUp.js"></script>
 </body>
 </html>
