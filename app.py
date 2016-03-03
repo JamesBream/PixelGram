@@ -44,6 +44,7 @@ def signUp():
         if _name and _email and _password:
         
             # Contact MySQL and set cursor
+            # MySQLdb handles opening and closing the connection as needed
             cur = mysql.connection.cursor()
         
             # We need to hash a salted password to store it securely
@@ -93,7 +94,7 @@ def validateLogin():
                 
                 # Set user session id and redirect
                 session['user'] = rv[0][0]
-                return redirect('/userFeed')
+                return redirect('/userHome')
             else:
                 return render_template('error.html', error = 'Invalid Email/Password combination.')
         else:
@@ -105,14 +106,14 @@ def validateLogin():
     finally:
         cur.close()
         
-@app.route('/userFeed')
-def userFeed():
+@app.route('/userHome')
+def userHome():
     
     # Only allow logged in users
     if session.get('user'):
-        return render_template('userFeed.html')
+        return render_template('userHome.html')
     else:
-        return render_template('error.html', error = 'Please Login to access the feed.')
+        return render_template('error.html', error = 'Please Login to access the user home.')
 @app.route('/logout')
 def logout():
     
@@ -120,6 +121,73 @@ def logout():
     session.pop('user', None)
     return redirect('/')
 
+@app.route('/showNewPost')
+def showNewPost():
+    return render_template('newPost.html')
+
+@app.route('/addNewPost', methods=['POST'])
+def addNewPost():
+    try:
+        if(session.get('user')):
+            _title = request.form['inputTitle']
+            _description = request.form['inputDescription']
+            _user = session.get('user')
+            
+            print (_title, " ", _description, " ", _user)
+            
+            # Connect to MySQL, set cursor and call proc
+            cur = mysql.connection.cursor()
+            cur.callproc('sp_newPost', (_title, _description, _user))        
+            # Fetch from cursor
+            rv = cur.fetchall()
+            
+            if len(rv) is 0:
+                mysql.connection.commit()
+                return redirect('/userHome')
+            else:
+                return render_template('error.html', error = 'An error occurred!')
+        else:
+            return render_template('error.html', error = 'Unauthorised Access!')
+        
+    except Exception as e:
+        print (str(e))
+        return render_template('error.html', error = str(e))
+    
+    finally:
+        cur.close()
+
+@app.route('/getPost')
+def getPost():
+    try:
+        if session.get('user'):
+            _user = session.get('user')
+            
+            # Connect to MySQL and fetch all posts for user
+            cur = mysql.connection.cursor()
+            cur.callproc('sp_getPostByUser', (_user,))
+            posts = cur.fetchall()
+            
+            posts_dict = []
+            for post in posts:
+                post_dict = {
+                    'Id': post[0],
+                    'Title': post[1],
+                    'Description': post[2],
+                    'Date': post[4]}
+                posts_dict.append(post_dict)
+
+            return json.dumps(posts_dict)
+        else:
+            # This is a poor way to return an error, need to return JSON and have ajax check for it
+            return render_template('error.html', error = 'Unauthorised access')
+        
+    except Exception as e:
+        print ("Got to 2")
+        return render_template('error.html', error = str(e))
+    
+    finally:
+        cur.close()
+    
 # Check if executed file is main program & run app locally for debugging
 if __name__ == "__main__":
     app.run(debug=True)
