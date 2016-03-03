@@ -182,7 +182,6 @@ def getPost():
             return render_template('error.html', error = 'Unauthorised access')
         
     except Exception as e:
-        print ("Got to 2")
         return render_template('error.html', error = str(e))
     
     finally:
