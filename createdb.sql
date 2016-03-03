@@ -14,6 +14,7 @@ CREATE TABLE `PixelGram`.`tbl_user` (
 	PRIMARY KEY (`user_id`));
 
 # Procedure for creating a user from passed in data
+USE `PixelGram`;
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_createUser`(
 	IN p_name VARCHAR(20),
@@ -46,6 +47,7 @@ END$$
 DELIMITER ;
 
 # Procedure for validating user login
+USE `PixelGram`;
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_validateLogin`(IN p_username VARCHAR(40)
 )
@@ -64,6 +66,7 @@ CREATE TABLE `tbl_post` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 # Procedure to add a new post
+USE `PixelGram`;
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_newPost`(
     IN p_title VARCHAR(45),
@@ -88,6 +91,7 @@ END$$
 DELIMITER ;
 
 # Procedure to retrieve a post
+USE `PixelGram`;
 DELIMITER $$
 CREATE PROCEDURE `sp_getPostByUser` (
     IN p_user_id BIGINT

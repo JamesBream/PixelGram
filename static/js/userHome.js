@@ -1,3 +1,6 @@
+// PixelGram
+// User Home page javascript
+
 $(function() {
     $.ajax({
         url: '/getPost',
