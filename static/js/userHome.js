@@ -1,35 +1,80 @@
 // PixelGram
 // User Home page javascript
 
-$(function() {
+$(function(){
+    
+    // Initial grid population
+    GetPosts();
+    
+    // Update button on-click event
+    $('#btnUpdate').click(function() {
+        $.ajax({
+            url: '/updatePost',
+            data: {
+                title: $('#editTitle').val(),
+                description: $('#editDescription').val(),
+                id: localStorage.getItem('editId')
+            },
+            type: 'POST',
+            success: function(res) {
+                $('#editModal').modal('hide');
+            
+                // Re populate the grid
+                GetPosts();
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        })
+    });
+});
+
+function GetPosts() {
     $.ajax({
         url: '/getPost',
         type: 'GET',
         success: function(res) {
-            // HTML structure to be created dynamically
-            var div = $('<div>')
-                .attr('class', 'list-group')
-                .append($('<a>')
-                       .attr('class', 'list-group-item active')
-                       .append($('<h4>')
-                              .attr('class', 'list-group-item-heading'),
-                              $('<p>')
-                              .attr('class', 'list-group-item-text')));
             
             // Parse JSON to object
             var postObj = JSON.parse(res);
-            var post = '';
             
-            // Clone above div, insert data and loop
-            $.each(postObj, function(index, value) {
-                post = $(div).clone();
-                $(post).find('h4').text(value.Title);
-                $(post).find('p').text(value.Description);
-                $('.jumbotron').append(post);
-            })
+            // Empty template and append
+            $('#ulist').empty();
+            $('#listTemplate').tmpl(postObj).appendTo('#ulist');
         },
         error: function(error) {
             console.log(error);
         }
     });
-});
+}
+
+function Edit(elm) {
+    // Store ID in local storage use later
+    localStorage.setItem('editId', $(elm).attr('data-id'));
+    $.ajax({
+        url: '/getPostById',
+        data: {
+            id: $(elm).attr('data-id')
+        },
+        type: 'POST',
+        success: function(res) {
+            // Parse the received JSON string
+            var data = JSON.parse(res);
+            
+            // Populate the pop up
+            $('#editTitle').val(data[0]['Title']);
+            $('#editDescription').val(data[0]['Description']);
+            
+            // Trigger pop up
+            $('#editModal').modal();
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+function ConfirmDelete(elm) {
+    localStorage.setItem('deleteId', $(elm).attr('data-id'));
+    $('#deleteModal').modal();
+}

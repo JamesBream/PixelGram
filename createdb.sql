@@ -90,7 +90,7 @@ BEGIN
 END$$
 DELIMITER ;
 
-# Procedure to retrieve a post
+# Procedure to retrieve all posts by a user
 USE `PixelGram`;
 DELIMITER $$
 CREATE PROCEDURE `sp_getPostByUser` (
@@ -98,5 +98,32 @@ CREATE PROCEDURE `sp_getPostByUser` (
 )
 BEGIN
     SELECT * FROM tbl_post WHERE post_user_id = p_user_id;
+END$$
+DELIMITER ;
+
+# Procedure to retrieve a post by its post ID and the userID
+USE `PixelGram`;
+DELIMITER $$
+CREATE PROCEDURE `sp_getPostByID` (
+    IN p_post_id BIGINT,
+    IN p_user_id BIGINT
+)
+BEGIN
+SELECT * FROM tbl_post WHERE post_id = p_post_id and post_user_id = p_user_id;
+END$$
+DELIMITER ;
+
+# Procedure to update a post
+USE `PixelGram`;
+DELIMITER $$
+CREATE PROCEDURE `sp_updatePost` (
+    IN p_title VARCHAR(45),
+    IN p_description VARCHAR(500),
+    IN p_post_id BIGINT,
+    IN p_user_id BIGINT
+)
+BEGIN
+    UPDATE tbl_post SET post_title = p_title, post_description = p_description
+        WHERE post_id = p_post_id and post_user_id = p_user_id;
 END$$
 DELIMITER ;

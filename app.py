@@ -186,6 +186,55 @@ def getPost():
     
     finally:
         cur.close()
+        
+@app.route('/getPostById', methods=['POST'])
+def getPostById():
+    try:
+        if session.get('user'):
+            
+            _id = request.form['id']
+            _user = session.get('user')
+            
+            cur = mysql.connection.cursor()
+            cur.callproc('sp_getPostById', (_id, _user))
+            rv = cur.fetchall()
+            
+            # Convert returned post to list
+            post = []
+            post.append({'Id':rv[0][0],'Title':rv[0][1],'Description':rv[0][2]})
+            
+            return json.dumps(post)
+        else:
+            return render_template('error.html', error = 'Unauthorised access')
+    except Exception as e:
+        return render_template('error.html', error = str(e))
+    finally:
+        cur.close()
+    
+@app.route('/updatePost', methods=['POST'])
+def updatePost():
+    try:
+        if session.get('user'):
+            _user = session.get('user')
+            _title = request.form['title']
+            _description = request.form['description']
+            _post_id = request.form['id']
+            
+            cur = mysql.connection.cursor()
+            cur.callproc('sp_updatePost', (_title, _description, _post_id, _user))
+            
+            rv = cur.fetchall()
+            
+            if len(rv) is 0:
+                mysql.connection.commit()
+                return json.dumps({'status':'OK'})
+            else:
+                return json.dumps({'status':'ERROR'})
+    except Exception as e:
+        return json.dumps({'error':str(e)})
+    finally:
+        # TODO: Fix this so that an error doesn't kill the server
+        cur.close()
     
 # Check if executed file is main program & run app locally for debugging
 if __name__ == "__main__":
