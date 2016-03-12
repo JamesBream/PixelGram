@@ -2,7 +2,6 @@
 // User Home page javascript
 
 $(function(){
-    
     // Initial grid population
     GetPosts();
     
@@ -58,7 +57,7 @@ function Edit(elm) {
         },
         type: 'POST',
         success: function(res) {
-            // Parse the received JSON string
+            // Parse the received JSON string (from python)
             var data = JSON.parse(res);
             
             // Populate the pop up
@@ -77,4 +76,27 @@ function Edit(elm) {
 function ConfirmDelete(elm) {
     localStorage.setItem('deleteId', $(elm).attr('data-id'));
     $('#deleteModal').modal();
+}
+
+function Delete() {
+    $.ajax({
+        url: '/deletePost',
+        data: {
+            id: localStorage.getItem('deleteId')
+        },
+        type: 'POST',
+        success: function(res) {
+            // Parse the received JSON string (from python)
+            var result = JSON.parse(res);
+            if (result.status == 'OK') {
+                $('#deleteModal').modal('hide');
+                GetPosts();
+            } else {
+                alert(result.status);
+            }
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
 }

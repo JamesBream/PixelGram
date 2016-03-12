@@ -127,3 +127,15 @@ BEGIN
         WHERE post_id = p_post_id and post_user_id = p_user_id;
 END$$
 DELIMITER ;
+
+# Procedure to delete posts
+USE `PixelGram`;
+DELIMITER $$
+CREATE PROCEDURE `sp_deletePost` (
+    IN p_post_id BIGINT,
+    IN p_user_id BIGINT
+)
+BEGIN
+    DELETE from tbl_post where post_id = p_post_id and post_user_id = p_user_id;
+END$$
+DELIMITER ;

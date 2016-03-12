@@ -235,6 +235,27 @@ def updatePost():
     finally:
         # TODO: Fix this so that an error doesn't kill the server
         cur.close()
+        
+@app.route('/deletePost', methods=['POST'])
+def deletePost():
+    if session.get('user'):
+        _post_id = request.form['id']
+        _user = session.get('user')
+        
+        cur = mysql.connection.cursor()
+        cur.callproc('sp_deletePost', (_post_id, _user))
+        
+        rv = cur.fetchall()
+        
+        if len(rv) is 0:
+            mysql.connection.commit()
+            return json.dumps({'status':'OK'})
+        else:
+            return json.dump({'status': 'Error'})
+        cur.close()
+    else:
+        return render_template('error.html', error = "Unauthorised access!")
+        
     
 # Check if executed file is main program & run app locally for debugging
 if __name__ == "__main__":

@@ -24,45 +24,85 @@
             </nav>
             <h3 class="text-muted">PixelGram</h3>
         </div>
-        <section>
-            <form class="form-horizontal" method="post" action="/addNewPost">
-                <fieldset>
+        
+        <form role="form" method="post" action="/addNewPost">
                     
-                    <!-- Form name -->
-                    <legend>Create a new post</legend>
+            <!-- Form name -->
+            <legend>Create a new post</legend>
                     
-                    <!-- Text input -->
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="txtTitle">Title</label>
-                        <div class="col-md-4">
-                            <input id="txtTitle" name="inputTitle" type="text" placeholder="placeholder" class="form-control input-md">
-                        </div>
-                    </div>
-                    
-                    <!-- Textarea -->
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="txtPost">Post</label>
-                        <div class="col-md-4">
-                            <textarea class="form-control" id="txtPost" name="inputDescription"></textarea>
-                        </div>
-                    </div>
-                    
-                    <!-- Button -->
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="singlebutton"></label>
-                        <div class="col-md-4">
-                            <input id="singlebutton" name="singlebutton" class="btn btn-primary" type="submit" value="Publish" />
-                        </div>
-                    </div>
+            <!-- Text input -->
+            <div class="form-group">
                 
-                </fieldset>
-            </form>
+                <label for="txtTitle">Title</label>
+                
+                <input id="txtTitle" name="inputTitle" type="text" placeholder="placeholder" class="form-control input-md">
+            </div>
+                    
+            <!-- Textarea -->
+            <div class="form-group">
+                <label for="txtPost">Description</label>
+                
+                <textarea class="form-control" id="txtPost" name="inputDescription"></textarea>
+            </div>
             
-        </section>
+            <!-- Image upload -->
+            <div class="form-group">
+                <label for="txtPost">Image</label>
+                
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <span class="btn btn-primary btn-file">
+                            Browse&hellip; 
+                            <input type="file" id="fileupload" name="file" multiple>
+                        </span>
+                    </span>
+                    <input type="text" class="form-control" readonly>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Mark this as hidden and not visible to others.</label>
+                <br/>
+                <input type="checkbox"> Mark as hidden <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+            </div>
+            
+            
+            <!-- Button -->
+            <div class="form-group">
+                <p class="text-center">
+                    <input id="singlebutton" name="singlebutton" class="btn btn-primary" type="submit" value="Publish"/>
+                </p>
+            </div>
+                
+        </form>
+            
         <footer class="footer">
             <p>&copy; PixelGram 2016</p>
         </footer>
     </div>
+    
+    <style>
+        .btn-file {
+            position: :relative;
+            overflow: hidden;
+        }
+        
+        .btn-file input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            outline: none;
+            background: white;
+            cursor: inherit;
+            display: block;
+        }
+    </style>
     
     <!-- jQuery and custom JS -->
     <script src="../static/js/jquery-1.12.1.js"></script>
