@@ -12,7 +12,8 @@ $(function(){
             data: {
                 title: $('#editTitle').val(),
                 description: $('#editDescription').val(),
-                id: localStorage.getItem('editId')
+                id: localStorage.getItem('editId'),
+                filePath: $('#imgUpload').attr('src')
             },
             type: 'POST',
             success: function(res) {
@@ -63,6 +64,7 @@ function Edit(elm) {
             // Populate the pop up
             $('#editTitle').val(data[0]['Title']);
             $('#editDescription').val(data[0]['Description']);
+            $('#imgUpload').attr('src', data[0]['FilePath']);
             
             // Trigger pop up
             $('#editModal').modal();
@@ -100,3 +102,28 @@ function Delete() {
         }
     });
 }
+
+// Initialise blueimp file uploader
+$(function() {
+    $('#fileupload').fileupload({
+        url: 'upload',
+        dataType: 'json',
+        add: function(e, data) {
+            data.submit();
+        },
+        success: function(response, status) {
+            
+            var filePath = 'static/uploads/' + response.filename;
+            
+            // Set thumbnail
+            $('#imgUpload').attr('src', filePath);
+            
+            // Store filePath in hidden input
+            $('#filePath').val(filePath);
+            console.log(response);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+})

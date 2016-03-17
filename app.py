@@ -3,6 +3,7 @@
 #####################
 
 # Includes
+import os, uuid
 from flask import Flask, render_template, json, redirect, session, request
 from flask.ext.mysqldb import MySQL
 from werkzeug import generate_password_hash, check_password_hash
@@ -21,6 +22,8 @@ app.config['MYSQL_PASSWORD'] = 'pythondev'
 app.config['MYSQL_DB'] = 'PixelGram'
 app.config['MYSQL_HOST'] = 'localhost'
 mysql.init_app(app)
+
+app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
 # App routing
 @app.route('/')
@@ -55,7 +58,7 @@ def signUp():
         
             # Fetch from cursor
             rv = cur.fetchall()
-            
+            cur.close()
             if len(rv) is 0:
                 mysql.connection.commit()
                 return json.dumps({'message':'User create success!'})
@@ -66,8 +69,6 @@ def signUp():
         
     except Exception as e:
         return json.dumps({'error':str(e)})
-    finally:
-        cur.close()
 
 @app.route('/showSignIn')
 def showSignIn():
@@ -94,7 +95,7 @@ def validateLogin():
                 
                 # Set user session id and redirect
                 session['user'] = rv[0][0]
-                return redirect('/userHome')
+                return redirect('/showFeed')
             else:
                 return render_template('error.html', error = 'Invalid Email/Password combination.')
         else:
@@ -132,12 +133,13 @@ def addNewPost():
             _title = request.form['inputTitle']
             _description = request.form['inputDescription']
             _user = session.get('user')
+            _filePath = request.form['filePath']
             
             print (_title, " ", _description, " ", _user)
             
             # Connect to MySQL, set cursor and call proc
             cur = mysql.connection.cursor()
-            cur.callproc('sp_newPost', (_title, _description, _user))        
+            cur.callproc('sp_newPost', (_title, _description, _user, _filePath))        
             # Fetch from cursor
             rv = cur.fetchall()
             
@@ -201,7 +203,7 @@ def getPostById():
             
             # Convert returned post to list
             post = []
-            post.append({'Id':rv[0][0],'Title':rv[0][1],'Description':rv[0][2]})
+            post.append({'Id':rv[0][0],'Title':rv[0][1],'Description':rv[0][2],'FilePath':rv[0][5]})
             
             return json.dumps(post)
         else:
@@ -219,9 +221,10 @@ def updatePost():
             _title = request.form['title']
             _description = request.form['description']
             _post_id = request.form['id']
+            _filePath = request.form['filePath']
             
             cur = mysql.connection.cursor()
-            cur.callproc('sp_updatePost', (_title, _description, _post_id, _user))
+            cur.callproc('sp_updatePost', (_title, _description, _post_id, _user, _filePath))
             
             rv = cur.fetchall()
             
@@ -255,7 +258,56 @@ def deletePost():
         cur.close()
     else:
         return render_template('error.html', error = "Unauthorised access!")
+    
+@app.route('/upload', methods=['GET', 'POST'])
+def upload():
+    if request.method == 'POST':
+        file = request.files['file']
         
+        # Determine the extension of the file
+        extension = os.path.splitext(file.filename)[1]
+        
+        # Generate unique filename
+        f_name = str(uuid.uuid4()) + extension
+        
+        # Save file
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], f_name))
+        
+        return json.dumps({'filename':f_name})
+    
+@app.route('/showFeed')
+def showFeed():
+    return render_template('feed.html')
+
+@app.route('/getAllPosts')
+def getAllPosts():
+    try:
+        if session.get('user'):
+            
+            # Open MySQL connnection and call SP
+            cur = mysql.connection.cursor()
+            cur.callproc('sp_getAllPosts')
+            rv = cur.fetchall()
+            
+            # Create data structure for posts from  returned data
+            posts_dict = []
+            for post in rv:
+                post_dict = {
+                    'Id': post[0],
+                    'Title': post[1],
+                    'Description': post[2],
+                    'FilePath': post[3]
+                }
+                posts_dict.append(post_dict)
+                
+            cur.close()
+            # Return data struct to browser
+            return json.dumps(posts_dict)
+        else:
+            return render_template('error.html', error = "Unauthorised Access")
+    except Exception as e:
+        return render_template('error.html', error = str(e))
+
     
 # Check if executed file is main program & run app locally for debugging
 if __name__ == "__main__":

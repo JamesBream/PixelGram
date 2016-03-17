@@ -17,6 +17,8 @@
         <div class="header">
             <nav>
                 <ul class="nav nav-pills pull-right">
+                    <li role="presentation"><a href="showFeed">Feed</a></li>
+                    <li role="presentation" class="active"><a href="#">Profile</a></li>
                     <li role="presentation"><a href="showNewPost">New Post</a>
                     </li>
                     <li role="presentation" class="active"><a href="/logout">Log out</a>
@@ -63,6 +65,23 @@
                             <label for="message-text" class="control-label">Description:</label>
                             <textarea class="form-control" id="editDescription"></textarea>
                         </div>
+                        <div class="form-group">
+                            <label for="txtPost">Image</label>
+                            
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <span class="btn btn-primary btn-file">
+                                        Browse&hellip;
+                                        <input type="file" id="fileupload" name="file" multiple>
+                                    </span>
+                                </span>
+                                <div class="pull-right">
+                                    <img id="imgUpload" style="width:140px; height: 140px;" class="img-thumbnail">
+                                    <input type="hidden" name="filePath" id="filePath">
+                                </div>
+                            </div>
+                            
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -107,6 +126,10 @@
     <script src="../static/js/userHome.js"></script>
     <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="../static/js/vendor/jquery.ui.widget.js"></script>
+    <script src="../static/js/jquery.fileupload.js"></script>
+    <script src="../static/js/jquery.fileupload-process.js"></script>
+    <script src="../static/js/jquery.fileupload-ui.js"></script>
     
     <!-- jQuery Template -->
     <script id="listTemplate" type="text/x-jQuery-tmpl">

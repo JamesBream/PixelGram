@@ -16,6 +16,8 @@
         <div class="header">
             <nav>
                 <ul class="nav nav-pills pull-right">
+                    <li role="presentation"><a href="showFeed">Feed</a></li>
+                    <li role="presentation"><a href="userHome">Profile</a></li>
                     <li role="presentation" class="active"><a href="#">New Post</a>
                     </li>
                     <li role="presentation"><a href="/logout">Logout</a>
@@ -56,7 +58,11 @@
                             <input type="file" id="fileupload" name="file" multiple>
                         </span>
                     </span>
-                    <input type="text" class="form-control" readonly>
+                    <div class="pull-right">
+                        <img id="imgUpload" style="width: 140px; height: 140px;" class="img-thumbnail">
+                        <!-- Hidden element to hold filepath post-upload -->
+                        <input type="hidden" name="filePath" id="filePath">
+                    </div>
                 </div>
             </div>
             
@@ -106,6 +112,11 @@
     
     <!-- jQuery and custom JS -->
     <script src="../static/js/jquery-1.12.1.js"></script>
+    <script src="../static/js/newPost.js"></script>
+    <script src="../static/js/vendor/jquery.ui.widget.js"></script>
+    <script src="../static/js/jquery.fileupload.js"></script>
+    <script src="../static/js/jquery.fileupload-process.js"></script>
+    <script src="../static/js/jquery.fileupload-ui.js"></script>
 </body>
 
 </html>

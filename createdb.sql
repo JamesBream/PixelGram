@@ -13,6 +13,16 @@ CREATE TABLE `PixelGram`.`tbl_user` (
 	`user_password` VARCHAR(66) NULL,
 	PRIMARY KEY (`user_id`));
 
+CREATE TABLE `PixelGram`.`tbl_post` (
+    `post_id` INT(11) NOT NULL AUTO_INCREMENT,
+    `post_title` VARCHAR(45) DEFAULT NULL,
+    `post_description` VARCHAR(500) DEFAULT NULL,
+    `post_user_id` BIGINT DEFAULT NULL,
+    `post_date` DATETIME DEFAULT NULL,
+    `post_file_path` VARCHAR(200) NULL,
+    PRIMARY KEY (`post_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
 # Procedure for creating a user from passed in data
 USE `PixelGram`;
 DELIMITER $$
@@ -56,36 +66,30 @@ BEGIN
 END$$
 DELIMITER ;
 
-CREATE TABLE `tbl_post` (
-    `post_id` INT(11) NOT NULL AUTO_INCREMENT,
-    `post_title` VARCHAR(45) DEFAULT NULL,
-    `post_description` VARCHAR(500) DEFAULT NULL,
-    `post_user_id` BIGINT DEFAULT NULL,
-    `post_date` DATETIME DEFAULT NULL,
-    PRIMARY KEY (`post_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-
 # Procedure to add a new post
 USE `PixelGram`;
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_newPost`(
     IN p_title VARCHAR(45),
     IN p_description VARCHAR(500),
-    IN p_user_id BIGINT
+    IN p_user_id BIGINT,
+    IN p_file_path VARCHAR(200)
 )
 BEGIN
     INSERT INTO tbl_post(
         post_title,
         post_description,
         post_user_id,
-        post_date
+        post_date,
+        post_file_path
     )
     VALUES
     (
         p_title,
         p_description,
         p_user_id,
-        NOW()
+        NOW(),
+        p_file_path
     );
 END$$
 DELIMITER ;
@@ -120,11 +124,15 @@ CREATE PROCEDURE `sp_updatePost` (
     IN p_title VARCHAR(45),
     IN p_description VARCHAR(500),
     IN p_post_id BIGINT,
-    IN p_user_id BIGINT
+    IN p_user_id BIGINT,
+    IN p_file_path VARCHAR(200)
 )
 BEGIN
-    UPDATE tbl_post SET post_title = p_title, post_description = p_description
-        WHERE post_id = p_post_id and post_user_id = p_user_id;
+UPDATE tbl_post SET 
+    post_title = p_title, 
+    post_description = p_description,
+    post_file_path = p_file_path
+    WHERE post_id = p_post_id and post_user_id = p_user_id;
 END$$
 DELIMITER ;
 
@@ -137,5 +145,14 @@ CREATE PROCEDURE `sp_deletePost` (
 )
 BEGIN
     DELETE from tbl_post where post_id = p_post_id and post_user_id = p_user_id;
+END$$
+DELIMITER ;
+
+# Procedure to get all posts
+USE `PixelGram` ()
+DELIMITER $$
+CREATE PROCEDURE `sp_getAllPosts`;
+BEGIN
+    SELECT post_id, post_title, post_description, post_file_path FROM tbl_post;
 END$$
 DELIMITER ;
