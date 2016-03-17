@@ -149,9 +149,9 @@ END$$
 DELIMITER ;
 
 # Procedure to get all posts
-USE `PixelGram` ()
+USE `PixelGram`;
 DELIMITER $$
-CREATE PROCEDURE `sp_getAllPosts`;
+CREATE PROCEDURE `sp_getAllPosts`()
 BEGIN
     SELECT post_id, post_title, post_description, post_file_path FROM tbl_post;
 END$$
