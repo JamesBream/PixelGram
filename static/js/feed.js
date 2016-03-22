@@ -17,16 +17,16 @@ $(function() {
                 if (itemsPerRow < 3) {
                     
                     if (i == data.length - 1) {
-                        div.append(CreateThumb(data[i].Id, data[i].Title, data[i].Description, data[i].FilePath));
+                        div.append(CreateThumb(data[i].Id, data[i].Title, data[i].Description, data[i].FilePath, data[i].Like, data[i].HasLiked));
                         $('.well').append(div);
                     } else {
-                        div.append(CreateThumb(data[i].Id, data[i].Title, data[i].Description, data[i].FilePath));
+                        div.append(CreateThumb(data[i].Id, data[i].Title, data[i].Description, data[i].FilePath, data[i].Like, data[i].HasLiked));
                         itemsPerRow++;
                     }
                 } else {
                     $('.well').append(div);
                     div = $('<div>').attr('class', 'row');
-                    div.append(CreateThumb(data[i].Id, data[i].Title, data[i].Description, data[i].FilePath));
+                    div.append(CreateThumb(data[i].Id, data[i].Title, data[i].Description, data[i].FilePath, data[i].Like, data[i].HasLiked));
                     if (i == data.length - 1) {
                         $('.well').append(div);
                     }
@@ -42,7 +42,7 @@ $(function() {
 
 // Function to create the thumbnail html
 // See: https://gist.github.com/JamesBream/75e6b9ae85d42a172837
-function CreateThumb(id, title, desc, fpath) {
+function CreateThumb(id, title, desc, fpath, like, hasLiked) {
     
     var mainDiv = $('<div>').attr('class', 'col-sm-4 col-md-4');
     
@@ -73,7 +73,16 @@ function CreateThumb(id, title, desc, fpath) {
         'aria-hidden': 'true'
     });
     
+    var likes = $('<span>').attr({'aria-hidden': 'true', 'id': 'span_' + id});
+    
+    if(hasLiked == "1") {
+        likes.html('&nbsp;You & ' + (Number(like) - 1) + ' others');
+    } else {
+        likes.html('&nbsp;' + like + ' like(s)');
+    }
+    
     p.append(btn.append(span));
+    p.append(likes);
     
     caption.append(title);
     caption.append(desc);
@@ -85,6 +94,32 @@ function CreateThumb(id, title, desc, fpath) {
     return mainDiv;
 }
 
+// Onclick function for 'Like' button
+$(document).on('click', '[id^="btn_"]', function() {
+    var spId = $(this).attr('id').split('_')[1];
+    $.ajax({
+        url: '/addUpdateLike',
+        method: 'POST',
+        data: {
+            post: $(this).attr('id').split('_')[1],
+            like: 1
+        },
+        success: function(response) {
+            // Parse returned like status and count
+            var obj = JSON.parse(response);
+            
+            if (obj.likeStatus == "1") {
+                $('#span_' + spId).html('&nbsp;You & ' + (Number(obj.total) - 1) + ' Others');
+            } else {
+                $('#span_' + spId).html('&nbsp;' + obj.total + 'like(s)');
+            }
+            console.log(response);
+        },
+        error: function(error) {
+        console.log(error);
+        }
+    });
+});
 
 
 
