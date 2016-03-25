@@ -1,6 +1,8 @@
 #####################
 # PixelGram Backend #
 #####################
+#       app.py      #
+#####################
 
 # Includes
 import os, uuid
@@ -24,6 +26,15 @@ app.config['MYSQL_HOST'] = 'localhost'
 mysql.init_app(app)
 
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
+
+# Check the uploads folder exists, otherwise create it
+print("INFO: Checking if upload folder exists")
+if not os.path.exists(app.config['UPLOAD_FOLDER']):
+    try:
+        print("WARN: Upload folder does not exist, creating it")
+        os.makedirs(app.config['UPLOAD_FOLDER'])
+    except Exception as e:
+        print(e)
 
 # App routing
 @app.route('/')
@@ -269,6 +280,16 @@ def upload():
         
         # Generate unique filename
         f_name = str(uuid.uuid4()) + extension
+        
+        # Check the upload folder exists, otherwise create it
+        # Check the uploads folder exists, otherwise create it
+        print("INFO: Checking if upload folder exists")
+        if not os.path.exists(app.config['UPLOAD_FOLDER']):
+        try:
+            print("WARN: Upload folder does not exist, creating it")
+            os.makedirs(app.config['UPLOAD_FOLDER'])
+        except Exception as e:
+            print(e)
         
         # Save file
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], f_name))
