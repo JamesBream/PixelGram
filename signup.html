@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+
+<head>
+    <title>PixelGram</title>
+    
+    <!-- Bootstrap -->
+    <link href="../static/css/bootstrap.css" rel="stylesheet">
+    
+    <!-- Bootstrap Jumbotron Template -->
+    <link href="../static/css/jumbotron-narrow.css" rel="stylesheet">
+    <link href="../static/css/signup.css" rel="stylesheet">
+</head>
+    
+<body>
+    <div class="container">
+        <div class="header">
+            <nav>
+                <ul class="nav nav-pills pull-right">
+                    <li role="presentation"><a href="/">Home</a></li>
+                    <li role="presentation"><a href="/showSignIn">Sign In</a></li>
+                    <!--<li role="presentation" class="active"><a href="#">Sign Up</a> </li>-->
+                </ul>
+            </nav>
+            <h3 class="text-muted">PixelGram</h3>
+        </div>
+        
+        <div class="jumbotron">
+            <h1>PixelGram</h1>
+            <form class="form-signin">
+                <label for="inputName" class="sr-only">Name</label>
+                <input type="name" name="inputName" id="inputName" class="form-control" placeholder="Name" required autofocus>
+                <label for="inputEmail" class="sr-only">Email Address</label>
+                <input type="email" name="inputEmail" id="inputEmail" class="form-control" placeholder="Email Address" required autofocus>
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" required>
+                <div class="form-group">
+                    <div class="col-sm-offset-1 col-sm-10">
+                        <div class="checkbox">
+                            <label><input type="checkbox"> Remember me</label>
+                        </div>
+                    </div>
+                </div>
+                <button id="btnLogIn" class="btn btn-lg btn-default btn-danger" type="submit"><a href="/showUserHome">Sign up</a></button>
+                
+            </form>
+        </div>
+        
+        
+        <footer class="footer">
+            <p>&copy; PixelGram 2016</p>
+        </footer>
+    </div>
+    
+    <!-- jQuery and custom JS -->
+    <script src="../static/js/jquery-1.12.1.js"></script>
+    <script src="../static/js/signUp.js"></script>
+</body>
+</html>

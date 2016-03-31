@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>PixelGram</title>
+    
+    <!-- Bootstrap -->
+    <link href="../static/css/bootstrap.css" rel="stylesheet">
+    
+    <!-- Bootstrap Jumbotron template -->
+    <link href="../static/css/jumbotron-narrow.css" rel="stylesheet">
+    <link href="../static/css/signup.css" rel="stylesheet">
+
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <nav>
+                <ul class="nav nav-pills pull-right">
+                    <li>
+                        <button id="btnFeed" role="presentation" class="btn btn-default btn-danger active" type="submit"><a href="/showFeed">Feed</a></button>
+                    </li>
+                    <li role="presentation"><a href="userHome">Profile</a></li>
+                    <li role="presentation"><a href="showNewPost">New Post</a>
+                    <li>
+                        <button id="btnLogOut" role="presentation" class="btn btn-default btn-danger active" type="submit"><a href="/showindex">Log out</a></button>
+                    </li>
+                </ul>
+            </nav>
+            <h3 class="text-muted">PixelGram</h3>
+        </div>
+        
+        <div class="well">
+            
+            <!-- Populated dynamically -->
+          
+        </div>
+        
+        <footer class="footer">
+            <p>&copy; PixelGram 2016</p>
+        </footer>
+    </div>
+    
+    <!-- jQuery and custom JS -->
+    <script src="../static/js/jquery-1.12.1.js"></script>
+    <script src="../static/js/feed.js"></script>
+</body>
+</html>
