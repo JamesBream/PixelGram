@@ -32,6 +32,13 @@ CREATE TABLE `PixelGram`.`tbl_likes` (
     PRIMARY KEY (`like_id`)
 );
 
+CREATE TABLE `PixelGram`.`tbl_postdevices` (
+    `entry_id` BIGINT NOT NULL AUTO_INCREMENT,
+    `post_id` BIGINT NOT NULL,
+    `device_id` INT NULL,
+    PRIMARY KEY (`entry_id`)
+);
+
 # Function to sum the total likes for posts
 USE `PixelGram`;
 DELIMITER $$

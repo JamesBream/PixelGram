@@ -3,6 +3,7 @@
 # Directories created for app runtime data #
 ############################################
 static/uploads/
+__pycache__
 
 # Logs #
 ########

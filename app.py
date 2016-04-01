@@ -6,9 +6,12 @@
 
 # Includes
 import os, uuid
+
 from flask import Flask, render_template, json, redirect, session, request
 from flask.ext.mysqldb import MySQL
 from werkzeug import generate_password_hash, check_password_hash
+
+import resizr
 
 app = Flask(__name__)
 mysql = MySQL()
@@ -139,35 +142,48 @@ def showNewPost():
 
 @app.route('/addNewPost', methods=['POST'])
 def addNewPost():
-    try:
-        if(session.get('user')):
-            _title = request.form['inputTitle']
-            _description = request.form['inputDescription']
-            _user = session.get('user')
-            _filePath = request.form['filePath']
+    #try:
+    if(session.get('user')):
+        _title = request.form['inputTitle']
+        _description = request.form['inputDescription']
+        _user = session.get('user')
+        _filePath = request.form['filePath']
+
+        print (_title, " ", _description, " ", _user)
+
+        # Connect to MySQL, set cursor and call proc
+        cur = mysql.connection.cursor()
+        cur.callproc('sp_newPost', (_title, _description, _user, _filePath))        
+        # Fetch from cursor
+        rv = cur.fetchall()
+
+        if len(rv) is 0:
+            # Commit the post
+            mysql.connection.commit()
+
+            # Resize uploaded image 
+            devices = resizr.ResizeForAll(_filePath)
+
+            # Add resized image paths to database
+            cur.execute("SELECT post_id FROM tbl_post WHERE post_file_path = %s", (_filePath,))
+            postid = cur.fetchall()
             
-            print (_title, " ", _description, " ", _user)
-            
-            # Connect to MySQL, set cursor and call proc
-            cur = mysql.connection.cursor()
-            cur.callproc('sp_newPost', (_title, _description, _user, _filePath))        
-            # Fetch from cursor
-            rv = cur.fetchall()
-            
-            if len(rv) is 0:
-                mysql.connection.commit()
-                return redirect('/userHome')
-            else:
-                return render_template('error.html', error = 'An error occurred!')
+            for device in devices:
+                cur.execute("INSERT INTO tbl_postdevices (post_id, device_id) VALUES (%s, %s)", (postid[0][0], device))
+                
+            mysql.connection.commit()
+            return redirect('/userHome')
         else:
-            return render_template('error.html', error = 'Unauthorised Access!')
+            return render_template('error.html', error = 'An error occurred!')
+    else:
+        return render_template('error.html', error = 'Unauthorised Access!')
         
-    except Exception as e:
-        print (str(e))
-        return render_template('error.html', error = str(e))
+    #except Exception as e:
+    #    print (str(e))
+    #    return render_template('error.html', error = str(e))
     
-    finally:
-        cur.close()
+    #finally:
+    #    cur.close()
 
 @app.route('/getPost')
 def getPost():
@@ -241,6 +257,18 @@ def updatePost():
             
             if len(rv) is 0:
                 mysql.connection.commit()
+                
+                # Resize uploaded image 
+                devices = resizr.ResizeForAll(_filePath)
+                
+                # Clear any existing entries
+                cur.execute("DELETE FROM tbl_postdevices WHERE post_id = %s", (_post_id,))
+                mysql.connection.commit()
+ 
+                for device in devices:
+                    cur.execute("INSERT INTO tbl_postdevices (post_id, device_id) VALUES (%s, %s)", (_post_id, device))
+
+                mysql.connection.commit()
                 return json.dumps({'status':'OK'})
             else:
                 return json.dumps({'status':'ERROR'})
@@ -285,14 +313,18 @@ def upload():
         # Check the uploads folder exists, otherwise create it
         print("INFO: Checking if upload folder exists")
         if not os.path.exists(app.config['UPLOAD_FOLDER']):
-        try:
-            print("WARN: Upload folder does not exist, creating it")
-            os.makedirs(app.config['UPLOAD_FOLDER'])
-        except Exception as e:
-            print(e)
+            try:
+                print("WARN: Upload folder does not exist, creating it")
+                os.makedirs(app.config['UPLOAD_FOLDER'])
+            except Exception as e:
+                print(e)
         
         # Save file
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], f_name))
+        
+        # Resize file 
+        #devices = resizr.ResizeForAll(app.config['UPLOAD_FOLDER'] + "/" + f_name)
+        #print(devices)
         
         return json.dumps({'filename':f_name})
     
