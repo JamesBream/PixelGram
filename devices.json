@@ -1,0 +1,5 @@
+{"devices":[
+    {"id": 0, "name": "iPhone 6", "width": 750, "height": 1334},
+    {"id": 1, "name": "iPhone 6 Plus", "width": 1242, "height": 2208},
+    {"id": 2, "name": "Galaxy S6", "width": 1440, "height": 2560}
+]}

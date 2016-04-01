@@ -1,6 +1,8 @@
 #####################
 # PixelGram Backend #
 #####################
+#       app.py      #
+#####################
 
 # Includes
 import os, uuid
@@ -24,6 +26,15 @@ app.config['MYSQL_HOST'] = 'localhost'
 mysql.init_app(app)
 
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
+
+# Check the uploads folder exists, otherwise create it
+print("INFO: Checking if upload folder exists")
+if not os.path.exists(app.config['UPLOAD_FOLDER']):
+    try:
+        print("WARN: Upload folder does not exist, creating it")
+        os.makedirs(app.config['UPLOAD_FOLDER'])
+    except Exception as e:
+        print(e)
 
 # App routing
 @app.route('/')
@@ -270,6 +281,16 @@ def upload():
         # Generate unique filename
         f_name = str(uuid.uuid4()) + extension
         
+        # Check the upload folder exists, otherwise create it
+        # Check the uploads folder exists, otherwise create it
+        print("INFO: Checking if upload folder exists")
+        if not os.path.exists(app.config['UPLOAD_FOLDER']):
+        try:
+            print("WARN: Upload folder does not exist, creating it")
+            os.makedirs(app.config['UPLOAD_FOLDER'])
+        except Exception as e:
+            print(e)
+        
         # Save file
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], f_name))
         
@@ -283,10 +304,11 @@ def showFeed():
 def getAllPosts():
     try:
         if session.get('user'):
+            _user = session.get('user')
             
             # Open MySQL connnection and call SP
             cur = mysql.connection.cursor()
-            cur.callproc('sp_getAllPosts')
+            cur.callproc('sp_getAllPosts', (_user,))
             rv = cur.fetchall()
             
             # Create data structure for posts from  returned data
@@ -296,7 +318,9 @@ def getAllPosts():
                     'Id': post[0],
                     'Title': post[1],
                     'Description': post[2],
-                    'FilePath': post[3]
+                    'FilePath': post[3],
+                    'Like': post[4],
+                    'HasLiked': post[5]
                 }
                 posts_dict.append(post_dict)
                 
@@ -308,6 +332,33 @@ def getAllPosts():
     except Exception as e:
         return render_template('error.html', error = str(e))
 
+@app.route('/addUpdateLike', methods=['POST'])
+def addUpdateLike():
+    if session.get('user'):
+        _postId = request.form['post']
+        _like = request.form['like']
+        _user = session.get('user')
+        
+        cur = mysql.connection.cursor()
+        cur.callproc('sp_AddUpdateLikes', (_postId, _user, _like))
+        rv = cur.fetchall()
+        
+        if len(rv) is 0:
+            mysql.connection.commit()
+            cur.close()
+        else:
+            cur.close()
+            return render_template('error.html', error = "An error occurred!")
+        
+        cur = mysql.connection.cursor()
+        cur.callproc('sp_getLikeStatus', (_postId, _user))
+        rv = cur.fetchall()
+        cur.close()
+        
+        return json.dumps({'status':'OK', 'total':rv[0][0], 'likeStatus':rv[0][1]})
+        
+    else:
+        return render_template('error.html', error = "Unauthorised access")
     
 # Check if executed file is main program & run app locally for debugging
 if __name__ == "__main__":
