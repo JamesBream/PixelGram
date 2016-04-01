@@ -1,6 +1,9 @@
 body {
   padding-top: 40px;
   padding-bottom: 40px;
+  background: #ABABAB;
+  padding-top: 40px;
+  padding-bottom: 40px;
 }
  
 .form-signin {
@@ -18,9 +21,9 @@ body {
 .form-signin .form-control {
   position: relative;
   height: auto;
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
+  -webkit-box-sizing: border-radius:100px;
+     -moz-box-sizing: border-radius:100px;
+          box-sizing: border-radius:100px;
   padding: 10px;
   font-size: 16px;
 }
@@ -36,4 +39,56 @@ body {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+
+.container .jumbotron, .container-fluid .jumbotron {
+    padding-right: 60px;
+    padding-left: 60px;
+    color: black;
+}
+.container .jumbotron, .container-fluid .jumbotron {
+    padding-right: 15px;
+    padding-left: 15px;
+    border-radius: 100px;
+}
+.jumbotron {
+    border-radius: 100px;
+}
+.jumbotron {
+    text-align: center;
+    border-radius: 100px solid #000000;
+}
+.jumbotron {
+    padding-top: 48px;
+    padding-bottom: 48px;
+}
+.jumbotron {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+    color: inherit;
+    background-color: #ffffff;
+}
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #000000;
+}
+html {
+    font-size: 10px;
+}
+html {
+    font-family: sans-serif;
+    -webkit-text-size-adjust: 100%;
+}
+
+?/*css for forgotten password*/
+.modal-footer {
+    border-top: 0px;
 }

@@ -4,6 +4,9 @@
 <head>
     <title>PixelGram</title>
     
+    <!-- Google Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Lobster&text=PixelGram' rel='stylesheet' type='text/css'>
+    
     <!-- Bootstrap -->
     <link href="../static/css/bootstrap.css" rel="stylesheet">
     
@@ -18,10 +21,13 @@
             <nav>
                 <ul class="nav nav-pills pull-right">
                     <li role="presentation"><a href="showFeed">Feed</a></li>
-                    <li role="presentation" class="active"><a href="#">Profile</a></li>
+                    <li>
+                        <button id="btnProfile" role="presentation" class="btn btn-default btn-danger active" type="submit"><a href="/#">Profile</a></button>
+                    </li>
                     <li role="presentation"><a href="showNewPost">New Post</a>
                     </li>
-                    <li role="presentation" class="active"><a href="/logout">Log out</a>
+                    <li>
+                        <button id="btnLogOut" role="presentation" class="btn btn-default btn-danger active" type="submit"><a href="/showindex">Log out</a></button>
                     </li>
                 </ul>
             </nav>

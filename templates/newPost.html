@@ -9,6 +9,8 @@
     
     <!-- Bootstrap Jumbrotron template -->
     <link href="../static/css/jumbotron-narrow.css" rel="stylesheet">
+    <link href="../static/css/signup.css" rel="stylesheet">
+
     
 </head>
 <body>
@@ -18,9 +20,10 @@
                 <ul class="nav nav-pills pull-right">
                     <li role="presentation"><a href="showFeed">Feed</a></li>
                     <li role="presentation"><a href="userHome">Profile</a></li>
-                    <li role="presentation" class="active"><a href="#">New Post</a>
+                    <li>
+                        <button id="btnNewPost" role="presentation" class="btn btn-default btn-danger active" type="submit"><a href="/#">New Post</a></button>
                     </li>
-                    <li role="presentation"><a href="/logout">Logout</a>
+                    <li role="presentation"><a href="/logout">Log out</a>
                     </li>
                 </ul>
             </nav>
@@ -30,14 +33,14 @@
         <form role="form" method="post" action="/addNewPost">
                     
             <!-- Form name -->
-            <legend>Create a new post</legend>
+            <legend>Upload a new post</legend>
                     
             <!-- Text input -->
             <div class="form-group">
                 
                 <label for="txtTitle">Title</label>
                 
-                <input id="txtTitle" name="inputTitle" type="text" placeholder="placeholder" class="form-control input-md">
+                <input id="txtTitle" name="inputTitle" type="text" placeholder="" class="form-control input-md">
             </div>
                     
             <!-- Textarea -->
@@ -53,7 +56,7 @@
                 
                 <div class="input-group">
                     <span class="input-group-btn">
-                        <span class="btn btn-primary btn-file">
+                        <span class="btn btn-primary btn-file btn-danger">
                             Browse&hellip; 
                             <input type="file" id="fileupload" name="file" multiple>
                         </span>
@@ -76,7 +79,7 @@
             <!-- Button -->
             <div class="form-group">
                 <p class="text-center">
-                    <input id="singlebutton" name="singlebutton" class="btn btn-primary" type="submit" value="Publish"/>
+                    <input id="singlebutton" name="singlebutton" class="btn btn-primary btn-danger" type="submit" value="Publish"/>
                 </p>
             </div>
                 

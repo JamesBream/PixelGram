@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
 
 <head>
     <title>PixelGram</title>
@@ -8,7 +9,7 @@
     <link href="../static/css/bootstrap.css" rel="stylesheet">
     
     <!-- Bootstrap Jumbotron Template -->
-    <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <link href="../static/css/jumbotron-narrow.css" rel="stylesheet">
     <link href="../static/css/signup.css" rel="stylesheet">
 </head>
     
@@ -19,7 +20,7 @@
                 <ul class="nav nav-pills pull-right">
                     <li role="presentation"><a href="/">Home</a></li>
                     <li role="presentation"><a href="/showSignIn">Sign In</a></li>
-                    <li role="presentation" class="active"><a href="#">Sign Up</a> </li>
+                    <!--<li role="presentation" class="active"><a href="#">Sign Up</a> </li>-->
                 </ul>
             </nav>
             <h3 class="text-muted">PixelGram</h3>
@@ -34,10 +35,18 @@
                 <input type="email" name="inputEmail" id="inputEmail" class="form-control" placeholder="Email Address" required autofocus>
                 <label for="inputPassword" class="sr-only">Password</label>
                 <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" required>
+                <div class="form-group">
+                    <div class="col-sm-offset-1 col-sm-10">
+                        <div class="checkbox">
+                            <label><input type="checkbox"> Remember me</label>
+                        </div>
+                    </div>
+                </div>
+                <button id="btnLogIn" class="btn btn-lg btn-default btn-danger" type="submit"><a href="/showUserHome">Sign up</a></button>
                 
-                <button id="btnSignUp" class="btn btn-lg btn-primary btn-block" type="button">Sign Up!</button>
             </form>
         </div>
+        
         
         <footer class="footer">
             <p>&copy; PixelGram 2016</p>
