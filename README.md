@@ -9,11 +9,13 @@ The following need to be installed to get started with developing for PixelGram 
         - Create a folder for the project, navigate to this folder using cd.
         - (cmd) git clone https://github.com/JamesBream/PixelGram.git
 
-The best way to learn how to use Git is probably by using this, despite it being tedious as f*ck. https://try.github.io/
+The best way to learn how to use Git is probably by using this resource https://try.github.io/
 
     - Install Python 3.5.x
-    - (cmd) pip install flask
-    - (cmd) pip install flask-mysqldb
+    - (cmd) pip3 install flask
+    - (cmd) pip3 install flask-mysqldb
+    - (cmd) pip3 install pillow
+    
     
 No troubles? Awesome.
 
@@ -22,9 +24,7 @@ No troubles? Awesome.
     
 Finally, some utilities... (Yeah, we're getting there, almost I think.)
 
-    - Install Adobe Brackets
+    - Install Adobe Brackets 
     - Install MySQL Workbench
 
-I honestly, think that's it. If you've cloned the repository from Github, you should be able to do `python app.py` in cmd in order to run the server. This will need restarting if you change the Python code but should be ok to leave running if you're working with anything else.
-
-Hey, I'm setting up this sh*t
+If everything instaleld, you should be able to do `python3 app.py` in the terminal to run the server. This can be left running in the background and is set up to automatiaclly detect changes in the `.py` files so you don't need to restart the server when changes are made.
