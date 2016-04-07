@@ -52,12 +52,12 @@ body {
   padding: 14px 24px;
   font-size: 21px;
 }
-/* This will only work properly if we pull the full font file from GFonts, currently we only pull "PixelGram" letters, reduces font size to ~10%
 
+/* This will only work properly if we pull the full font file from GFonts, currently we only pull "PixelGram" letters, reduces font size to ~10% */
 .jumbotron h1 {
       font-family: 'Lobster', cursive;
 }
-*/
+
 
 /* Supporting marketing content */
 .marketing {

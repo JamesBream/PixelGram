@@ -51,7 +51,7 @@ function CreateThumb(id, title, desc, fpath, like, hasLiked) {
     var img = $('<img>').attr({
         'src': fpath,
         'data-holder-rendered': true,
-        'style': 'height: 150px; width: 150px; display: block'
+        'style': 'height: 255px; width: 150px; display: block'
     });
     
     var caption = $('<div>').attr('class', 'caption');
@@ -111,7 +111,7 @@ $(document).on('click', '[id^="btn_"]', function() {
             if (obj.likeStatus == "1") {
                 $('#span_' + spId).html('&nbsp;You & ' + (Number(obj.total) - 1) + ' Others');
             } else {
-                $('#span_' + spId).html('&nbsp;' + obj.total + 'like(s)');
+                $('#span_' + spId).html('&nbsp;' + obj.total + ' like(s)');
             }
             console.log(response);
         },
