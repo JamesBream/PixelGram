@@ -42,7 +42,12 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
 # App routing
 @app.route('/')
 def main():
-    return render_template('index.html')
+    # If already logged in, redirect to the feed
+    if session.get('user'):
+        return redirect('/showFeed')
+    # Otherwise show the homepage
+    else:
+        return render_template('index.html')
 
 @app.route('/showSignUp')
 def showSignUp():
