@@ -23,7 +23,6 @@ body {
   margin-bottom: 0;
   line-height: 40px;
   font-family: 'Lobster', cursive;
-  
 }
 
 /* Custom page footer */
@@ -56,6 +55,12 @@ body {
 /* This will only work properly if we pull the full font file from GFonts, currently we only pull "PixelGram" letters, reduces font size to ~10% */
 .jumbotron h1 {
       font-family: 'Lobster', cursive;
+}
+
+/* Styling brand name */
+.navbar-brand {
+    font-family: 'Lobster', cursive;
+    font-size: 30px;
 }
 
 
