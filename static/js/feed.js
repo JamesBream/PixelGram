@@ -51,7 +51,8 @@ function CreateThumb(id, title, desc, fpath, like, hasLiked) {
     var img = $('<img>').attr({
         'src': fpath,
         'data-holder-rendered': true,
-        'style': 'height: 255px; width: 150px; display: block'
+        'style': 'height: 255px; width: 150px; display: block',
+        'id': 'img_' + id
     });
     
     var caption = $('<div>').attr('class', 'caption');
@@ -120,6 +121,27 @@ $(document).on('click', '[id^="btn_"]', function() {
         }
     });
 });
+
+// Onclick function for image modal
+$(document).on('click', '[id^="img_"]', function() {
+    var spId = $(this).attr('id').split('_')[1];
+    $.ajax({
+        url: '/getImageSizes',
+        method: 'POST',
+        data: {
+            post: $(this).attr('id').split('_')[1]
+        },
+        success: function(response) {
+            console.log(response);
+            $('#showImageModal').modal('show');
+            
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    })
+    
+})
 
 
 

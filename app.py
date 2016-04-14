@@ -44,7 +44,12 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
 # App routing
 @app.route('/')
 def main():
-    return render_template('index.html')
+    # If already logged in, redirect to the feed
+    if session.get('user'):
+        return redirect('/showFeed')
+    # Otherwise show the homepage
+    else:
+        return render_template('index.html')
 
 @app.route('/showSignUp')
 def showSignUp():
@@ -77,11 +82,11 @@ def signUp():
             cur.close()
             if len(rv) is 0:
                 mysql.connection.commit()
-                return json.dumps({'message':'User create success!'})
+                return json.dumps({'message':'User create success! You may now log in.'})
             else:
                 return json.dumps({'error':str(rv[0])})
         else:
-            return json.dumps({'html':'<span>Enter the required fields</span>'})
+            return json.dumps({'message':'Error: Enter the required fields'})
         
     except Exception as e:
         return json.dumps({'error':str(e)})

@@ -3,22 +3,18 @@
 
 <head>
     <title>PixelGram</title>
-    
+
     <!-- Google Fonts -->
     <link href='https://fonts.googleapis.com/css?family=Lobster&text=PixelGram' rel='stylesheet' type='text/css'>
-    
+
     <!-- Bootstrap -->
     <link href="../static/css/bootstrap.css" rel="stylesheet">
-    
-    <!-- NavBar -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    
+
     <!-- Bootstrap Jumbotron Template -->
     <link href="../static/css/jumbotron-narrow.css" rel="stylesheet">
     <link href="../static/css/signup.css" rel="stylesheet">
 </head>
-    
+
 <body>
     <div class="container">
         <nav class="navbar navbar-default">
@@ -50,7 +46,10 @@
             </nav>
             <h3 class="text-muted">PixelGram</h3>
         </div> -->
-        
+
+        <!-- Placeholder for feedback alert-->
+        <div id="signup_alert_placeholder"></div>
+
         <div class="jumbotron">
             <h1>PixelGram</h1>
             <div class="bs-callout bs-callout-warning hidden">
@@ -69,19 +68,20 @@
                 <label for="inputEmail" class="sr-only">Email Address</label>
                 <input data-parsley-trigger="change" required="" type="email" name="inputEmail" id="inputEmail" class="form-control" placeholder="Email Address" required autofocus>
                 <label for="inputPassword" class="sr-only">Password</label>
-                <input required="" type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" required>
+                <input required="" type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password">
                 
                 <button id="btnSignUp" class="btn btn-lg btn-primary btn-block" type="submit">Sign Up!</button>
             </form>
         </div>
-        
+
         <footer class="footer">
             <p>&copy; PixelGram 2016</p>
         </footer>
     </div>
-    
+
     <!-- jQuery and custom JS -->
     <script src="../static/js/jquery-1.12.2.js"></script>
+    <script src="../static/js/bootstrap.js"></script>
     <script src="../static/js/signUp.js"></script>
     <script src="../static/js/parsley.min.js"></script>
     <script type="text/javascript">
@@ -97,4 +97,5 @@
         });
 </script>
 </body>
+
 </html>
