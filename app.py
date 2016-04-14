@@ -13,6 +13,8 @@ from werkzeug import generate_password_hash, check_password_hash
 
 import resizr
 
+import re
+
 app = Flask(__name__)
 mysql = MySQL()
 
@@ -59,7 +61,7 @@ def signUp():
     
         # Validate received values
         if _name and _email and _password:
-        
+            
             # Contact MySQL and set cursor
             # MySQLdb handles opening and closing the connection as needed
             cur = mysql.connection.cursor()

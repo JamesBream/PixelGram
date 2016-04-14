@@ -53,15 +53,25 @@
         
         <div class="jumbotron">
             <h1>PixelGram</h1>
-            <form class="form-signin">
+            <div class="bs-callout bs-callout-warning hidden">
+                <br><p>Invalid Data<br>
+                Something seems to be wrong</p>
+            </div>
+
+            <div class="bs-callout bs-callout-info hidden">
+                <br><p>Valid Data<br>
+                Congratulations, you're free to sign up!</p>
+            </div>
+            
+            <form id="sign-up-form" class="form-signin" data-parsley-validate="">
                 <label for="inputName" class="sr-only">Name</label>
-                <input type="name" name="inputName" id="inputName" class="form-control" placeholder="Name" required autofocus>
+                <input required="" type="name" name="inputName" id="inputName" class="form-control" placeholder="Name" required autofocus>
                 <label for="inputEmail" class="sr-only">Email Address</label>
-                <input type="email" name="inputEmail" id="inputEmail" class="form-control" placeholder="Email Address" required autofocus>
+                <input data-parsley-trigger="change" required="" type="email" name="inputEmail" id="inputEmail" class="form-control" placeholder="Email Address" required autofocus>
                 <label for="inputPassword" class="sr-only">Password</label>
-                <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" required>
+                <input required="" type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" required>
                 
-                <button id="btnSignUp" class="btn btn-lg btn-primary btn-block" type="button">Sign Up!</button>
+                <button id="btnSignUp" class="btn btn-lg btn-primary btn-block" type="submit">Sign Up!</button>
             </form>
         </div>
         
@@ -73,5 +83,18 @@
     <!-- jQuery and custom JS -->
     <script src="../static/js/jquery-1.12.2.js"></script>
     <script src="../static/js/signUp.js"></script>
+    <script src="../static/js/parsley.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+          $('#sign-up-form').parsley().on('field:validated', function() {
+            var ok = $('.parsley-error').length === 0;
+            $('.bs-callout-info').toggleClass('hidden', !ok);
+            $('.bs-callout-warning').toggleClass('hidden', ok);
+          })
+          .on('form:submit', function() {
+            return false; // Don't submit form for this demo
+          });
+        });
+</script>
 </body>
 </html>
