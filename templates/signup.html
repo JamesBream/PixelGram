@@ -82,20 +82,9 @@
     <!-- jQuery and custom JS -->
     <script src="../static/js/jquery-1.12.2.js"></script>
     <script src="../static/js/bootstrap.js"></script>
+    <script src="../static/js/parsley.js"></script>
     <script src="../static/js/signUp.js"></script>
-    <script src="../static/js/parsley.min.js"></script>
-    <script type="text/javascript">
-        $(function () {
-          $('#sign-up-form').parsley().on('field:validated', function() {
-            var ok = $('.parsley-error').length === 0;
-            $('.bs-callout-info').toggleClass('hidden', !ok);
-            $('.bs-callout-warning').toggleClass('hidden', ok);
-          })
-          .on('form:submit', function() {
-            return false; // Don't submit form for this demo
-          });
-        });
-</script>
+
 </body>
 
 </html>
