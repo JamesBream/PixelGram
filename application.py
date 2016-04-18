@@ -1,7 +1,7 @@
 #####################
 # PixelGram Backend #
 #####################
-#       app.py      #
+#   application.py  #
 #####################
 
 # Includes
@@ -15,34 +15,34 @@ import resizr
 
 import re
 
-app = Flask(__name__)
+application = Flask(__name__)
 mysql = MySQL()
 
 # 504 bit session key
-app.secret_key  = '?KzNp>j0-7ec;4c9zG]@tjrBy3uCZNeEsDFm*!%buG7A97?#3ANL*97;D?(jpe9'
+application.secret_key  = '?KzNp>j0-7ec;4c9zG]@tjrBy3uCZNeEsDFm*!%buG7A97?#3ANL*97;D?(jpe9'
 
 # Config MySQL
 # Don't run as root in production!
 
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'pythondev'
-app.config['MYSQL_DB'] = 'PixelGram'
-app.config['MYSQL_HOST'] = 'localhost'
-mysql.init_app(app)
+application.config['MYSQL_USER'] = 'root'
+application.config['MYSQL_PASSWORD'] = 'pythondev'
+application.config['MYSQL_DB'] = 'PixelGram'
+application.config['MYSQL_HOST'] = 'localhost'
+mysql.init_app(application)
 
-app.config['UPLOAD_FOLDER'] = 'static/uploads'
+application.config['UPLOAD_FOLDER'] = 'static/uploads'
 
 # Check the uploads folder exists, otherwise create it
 print("INFO: Checking if upload folder exists")
-if not os.path.exists(app.config['UPLOAD_FOLDER']):
+if not os.path.exists(application.config['UPLOAD_FOLDER']):
     try:
         print("WARN: Upload folder does not exist, creating it")
-        os.makedirs(app.config['UPLOAD_FOLDER'])
+        os.makedirs(application.config['UPLOAD_FOLDER'])
     except Exception as e:
         print(e)
 
 # App routing
-@app.route('/')
+@application.route('/')
 def main():
     # If already logged in, redirect to the feed
     if session.get('user'):
@@ -51,11 +51,11 @@ def main():
     else:
         return render_template('index.html')
 
-@app.route('/showSignUp')
+@application.route('/showSignUp')
 def showSignUp():
     return render_template('signup.html')
 
-@app.route('/signUp', methods=['POST'])
+@application.route('/signUp', methods=['POST'])
 def signUp():
     try:
         
@@ -91,11 +91,11 @@ def signUp():
     except Exception as e:
         return json.dumps({'error':str(e)})
 
-@app.route('/showSignIn')
+@application.route('/showSignIn')
 def showSignIn():
     return render_template('signin.html')
 
-@app.route('/validateLogin', methods=['POST'])
+@application.route('/validateLogin', methods=['POST'])
 def validateLogin():
     
     # Read values posted from page
@@ -128,7 +128,7 @@ def validateLogin():
     finally:
         cur.close()
         
-@app.route('/userHome')
+@application.route('/userHome')
 def userHome():
     
     # Only allow logged in users
@@ -136,18 +136,18 @@ def userHome():
         return render_template('userHome.html')
     else:
         return render_template('error.html', error = 'Please Login to access the user home.')
-@app.route('/logout')
+@application.route('/logout')
 def logout():
     
     # Set user session to null
     session.pop('user', None)
     return redirect('/')
 
-@app.route('/showNewPost')
+@application.route('/showNewPost')
 def showNewPost():
     return render_template('newPost.html')
 
-@app.route('/addNewPost', methods=['POST'])
+@application.route('/addNewPost', methods=['POST'])
 def addNewPost():
     #try:
     if(session.get('user')):
@@ -192,7 +192,7 @@ def addNewPost():
     #finally:
     #    cur.close()
 
-@app.route('/getPost')
+@application.route('/getPost')
 def getPost():
     try:
         if session.get('user'):
@@ -223,7 +223,7 @@ def getPost():
     finally:
         cur.close()
         
-@app.route('/getPostById', methods=['POST'])
+@application.route('/getPostById', methods=['POST'])
 def getPostById():
     try:
         if session.get('user'):
@@ -247,7 +247,7 @@ def getPostById():
     finally:
         cur.close()
     
-@app.route('/updatePost', methods=['POST'])
+@application.route('/updatePost', methods=['POST'])
 def updatePost():
     try:
         if session.get('user'):
@@ -285,7 +285,7 @@ def updatePost():
         # TODO: Fix this so that an error doesn't kill the server
         cur.close()
         
-@app.route('/deletePost', methods=['POST'])
+@application.route('/deletePost', methods=['POST'])
 def deletePost():
     if session.get('user'):
         _post_id = request.form['id']
@@ -305,7 +305,7 @@ def deletePost():
     else:
         return render_template('error.html', error = "Unauthorised access!")
     
-@app.route('/upload', methods=['GET', 'POST'])
+@application.route('/upload', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
         file = request.files['file']
@@ -319,27 +319,27 @@ def upload():
         # Check the upload folder exists, otherwise create it
         # Check the uploads folder exists, otherwise create it
         print("INFO: Checking if upload folder exists")
-        if not os.path.exists(app.config['UPLOAD_FOLDER']):
+        if not os.path.exists(application.config['UPLOAD_FOLDER']):
             try:
                 print("WARN: Upload folder does not exist, creating it")
-                os.makedirs(app.config['UPLOAD_FOLDER'])
+                os.makedirs(application.config['UPLOAD_FOLDER'])
             except Exception as e:
                 print(e)
         
         # Save file
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], f_name))
+        file.save(os.path.join(application.config['UPLOAD_FOLDER'], f_name))
         
         # Resize file 
-        #devices = resizr.ResizeForAll(app.config['UPLOAD_FOLDER'] + "/" + f_name)
+        #devices = resizr.ResizeForAll(application.config['UPLOAD_FOLDER'] + "/" + f_name)
         #print(devices)
         
         return json.dumps({'filename':f_name})
     
-@app.route('/showFeed')
+@application.route('/showFeed')
 def showFeed():
     return render_template('feed.html')
 
-@app.route('/getAllPosts')
+@application.route('/getAllPosts')
 def getAllPosts():
     try:
         if session.get('user'):
@@ -371,7 +371,7 @@ def getAllPosts():
     except Exception as e:
         return render_template('error.html', error = str(e))
 
-@app.route('/addUpdateLike', methods=['POST'])
+@application.route('/addUpdateLike', methods=['POST'])
 def addUpdateLike():
     if session.get('user'):
         _postId = request.form['post']
@@ -399,6 +399,6 @@ def addUpdateLike():
     else:
         return render_template('error.html', error = "Unauthorised access")
     
-# Check if executed file is main program & run app locally for debugging
+# If running from Python CLI, run on local debugging server
 if __name__ == "__main__":
-    app.run(debug=True)
+    application.run(debug=True)
