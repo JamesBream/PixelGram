@@ -69,7 +69,7 @@ DELIMITER ;
 # Procedure for creating a user from passed in data
 USE `PixelGram`;
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_createUser`(
+CREATE PROCEDURE `sp_createUser`(
 	IN p_name VARCHAR(20),
 	IN p_username VARCHAR(40),
 	IN p_password VARCHAR(66)
@@ -102,7 +102,7 @@ DELIMITER ;
 # Procedure for validating user login
 USE `PixelGram`;
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_validateLogin`(IN p_username VARCHAR(40)
+CREATE PROCEDURE `sp_validateLogin`(IN p_username VARCHAR(40)
 )
 BEGIN
     select * from tbl_user where user_username = p_username;
@@ -112,7 +112,7 @@ DELIMITER ;
 # Procedure to add a new post
 USE `PixelGram`;
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_newPost`(
+CREATE PROCEDURE `sp_newPost`(
     IN p_title VARCHAR(45),
     IN p_description VARCHAR(500),
     IN p_user_id BIGINT,
