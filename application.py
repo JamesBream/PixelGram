@@ -9,11 +9,9 @@ import os, uuid
 
 from flask import Flask, render_template, json, redirect, session, request
 from flask.ext.mysqldb import MySQL
-from werkzeug import generate_password_hash, check_password_hash
+from werkzeug import generate_password_hash, check_password_hash, secure_filename
 
 import resizr
-
-import re
 
 application = Flask(__name__)
 mysql = MySQL()
@@ -30,7 +28,9 @@ application.config['MYSQL_DB'] = 'PixelGram'
 application.config['MYSQL_HOST'] = 'localhost'
 mysql.init_app(application)
 
+# Define uploads folder and allowed file types - Should not be changed for now!
 application.config['UPLOAD_FOLDER'] = 'static/uploads'
+ALLOWED_EXTENSIONS = set(['jpg'])
 
 # Check the uploads folder exists, otherwise create it
 print("INFO: Checking if upload folder exists")
@@ -40,6 +40,10 @@ if not os.path.exists(application.config['UPLOAD_FOLDER']):
         os.makedirs(application.config['UPLOAD_FOLDER'])
     except Exception as e:
         print(e)
+        
+def allowed_file(filename):
+    return '.' in filename and \
+            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 # App routing
 @application.route('/')
@@ -309,31 +313,33 @@ def deletePost():
 def upload():
     if request.method == 'POST':
         file = request.files['file']
-        
-        # Determine the extension of the file
-        extension = os.path.splitext(file.filename)[1]
-        
-        # Generate unique filename
-        f_name = str(uuid.uuid4()) + extension
-        
-        # Check the upload folder exists, otherwise create it
-        # Check the uploads folder exists, otherwise create it
-        print("INFO: Checking if upload folder exists")
-        if not os.path.exists(application.config['UPLOAD_FOLDER']):
-            try:
-                print("WARN: Upload folder does not exist, creating it")
-                os.makedirs(application.config['UPLOAD_FOLDER'])
-            except Exception as e:
-                print(e)
-        
-        # Save file
-        file.save(os.path.join(application.config['UPLOAD_FOLDER'], f_name))
-        
-        # Resize file 
-        #devices = resizr.ResizeForAll(application.config['UPLOAD_FOLDER'] + "/" + f_name)
-        #print(devices)
-        
-        return json.dumps({'filename':f_name})
+        if file and allowed_file(file.filename):
+            # Determine the extension of the file
+            extension = os.path.splitext(file.filename)[1]
+
+            # Generate unique filename
+            f_name = str(uuid.uuid4()) + extension
+
+            # Check the upload folder exists, otherwise create it
+            # Check the uploads folder exists, otherwise create it
+            print("INFO: Checking if upload folder exists")
+            if not os.path.exists(application.config['UPLOAD_FOLDER']):
+                try:
+                    print("WARN: Upload folder does not exist, creating it")
+                    os.makedirs(application.config['UPLOAD_FOLDER'])
+                except Exception as e:
+                    print(e)
+
+            # Save file
+            file.save(os.path.join(application.config['UPLOAD_FOLDER'], f_name))
+
+            # Resize file 
+            #devices = resizr.ResizeForAll(application.config['UPLOAD_FOLDER'] + "/" + f_name)
+            #print(devices)
+
+            return json.dumps({'filename':f_name})
+        else:
+            return json.dumps({'error':'Invalid filetype, JPG only!'})
     
 @application.route('/showFeed')
 def showFeed():
