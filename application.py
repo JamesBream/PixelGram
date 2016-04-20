@@ -86,11 +86,11 @@ def signUp():
             cur.close()
             if len(rv) is 0:
                 mysql.connection.commit()
-                return json.dumps({'message':'User create success! You may now log in.'})
+                return json.dumps({'success':'User create success! You may now log in.'})
             else:
                 return json.dumps({'error':str(rv[0])})
         else:
-            return json.dumps({'message':'Error: Enter the required fields'})
+            return json.dumps({'error':'Error: Enter the required fields'})
         
     except Exception as e:
         return json.dumps({'error':str(e)})

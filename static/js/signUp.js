@@ -7,10 +7,18 @@ $(function(){
 			data: $('form').serialize(),
 			type: 'POST',
 			success: function(response){
-				console.log(response);
+                
                 var data = JSON.parse(response);
-                console.log(data['message']);
-                signup_alert.warning(data['message']);
+                
+                if (data.hasOwnProperty('success')) {
+                    signup_alert.success(data.success);
+                }
+                else if (data.hasOwnProperty('error')) {
+                    signup_alert.warning("Please verify your details are correct");
+                }
+                else {
+                    console.log(response)
+                }
 			},
 			error: function(error){
 				console.log(error);
@@ -20,6 +28,7 @@ $(function(){
 	});
 });
 
+// User alerts
 signup_alert = function() {}
 signup_alert.success = function(message) {
     $('#signup_alert_placeholder').html('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><span>'+message+'</span></div>')
