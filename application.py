@@ -399,6 +399,47 @@ def addUpdateLike():
     else:
         return render_template('error.html', error = "Unauthorised access")
     
+@application.route('/getImageSizes', methods=['POST'])
+def getImageSizes():
+    if session.get('user'):
+        # Request the image ID to query
+        _post_id = request.form['post']        
+        
+        # Return the UUID of the post's image
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT post_file_path FROM tbl_post WHERE post_id = %s", (_post_id,))
+        rv = cur.fetchall()
+        if len(rv) > 0:
+            uuid = os.path.split(rv[0][0])[1]
+        else:
+            cur.close()
+            return json.dumps({'error':'Post does not exist in database'})
+        
+        # Return available device IDs for post
+        cur.execute("SELECT device_id FROM tbl_postdevices WHERE post_id = %s", (_post_id,))
+        availableDevices = cur.fetchall()
+
+        # Query devices.json to match device id to device name
+        with open('devices.json', 'r') as data_file:
+            json_obj = json.load(data_file)
+        
+        # Create data structure for posts from  returned data
+        post_devices_dict = []
+        for post in availableDevices:
+            
+            # Generate device name and file path
+            deviceName = json_obj['device'][post[0]]['name']
+            filePath = application.config['UPLOAD_FOLDER'] + "/" + str(post[0]) + "/" + uuid
+            
+            post_dict = {
+                'Device': deviceName,
+                'FilePath': filePath
+            }
+            post_devices_dict.append(post_dict)
+        cur.close()
+        # Return data struct to browser
+        return json.dumps(post_devices_dict)        
+    
 # If running from Python CLI, run on local debugging server
 if __name__ == "__main__":
     application.run(debug=True)

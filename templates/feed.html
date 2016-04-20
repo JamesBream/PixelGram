@@ -61,17 +61,24 @@
             <p>&copy; PixelGram 2016</p>
         </footer>
         
-        <!-- View/download image popup modal -->
-        <div class="modal fade" id="showImageModal" tabindex="-1" role="dialog" aria-labelledby="showImageModalLabel" aria-hidden="true">
+        <!-- Download image popup modal -->
+        <div class="modal fade" id="downloadImageModal" tabindex="-1" role="dialog" aria-labelledby="downloadImageModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title" style="color:red;" id="deleteModalLabel">Warning: Are you sure you want to permanently delete your post?</h4>
+                        <h4 class="modal-title" id="downloadImageModalLabel">Please choose your device</h4>
                     </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" onclick="Delete()">Delete</button>
+                    <div class="modal-body">
+                        <!-- Single button -->
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Device Name <span class="caret"></span>
+                          </button>
+                          <ul class="dropdown-menu">
+                              <!-- Populated by JS -->
+                          </ul>
+                        </div>
+                        <h5>Your wallpaper will open in a new tab</h5>
                     </div>
                 </div>
             </div>

@@ -122,7 +122,7 @@ $(document).on('click', '[id^="btn_"]', function() {
     });
 });
 
-// Onclick function for image modal
+// Onclick function for download image modal
 $(document).on('click', '[id^="img_"]', function() {
     var spId = $(this).attr('id').split('_')[1];
     $.ajax({
@@ -133,15 +133,27 @@ $(document).on('click', '[id^="img_"]', function() {
         },
         success: function(response) {
             console.log(response);
-            $('#showImageModal').modal('show');
+            var data = JSON.parse(response);
             
+            // Empty any previously appended HTML
+            $('.dropdown-menu').empty();
+            
+            // Append each device to the dropdown menu
+            for (var i = 0; i < data.length; i++) {
+                var li = $('<li>');
+                var a = $('<a>').attr({'href': data[i].FilePath, 'target': '_blank'});
+                var span = $('<span>').text(data[i].Device);
+                                
+                $('.dropdown-menu').append(li.append(a.append(span)))
+            }
+            // Trigger modal
+            $('#downloadImageModal').modal('show');
         },
         error: function(error) {
             console.log(error);
         }
-    })
-    
-})
+    });
+});
 
 
 
