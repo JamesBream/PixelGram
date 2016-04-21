@@ -155,6 +155,10 @@
     <script src="../static/js/jquery.fileupload-process.js"></script>
     <script src="../static/js/jquery.fileupload-ui.js"></script>
     
+    <!-- Removed from jQuery template for now -->
+    <!-- <a data-id=${Id} onclick="Edit(this)"><span class="glyphicon glyphicon-pencil"></span></a> -->
+
+    
     <!-- jQuery Template -->
     <script id="listTemplate" type="text/x-jQuery-tmpl">
         <li class="list-group-item">
@@ -163,9 +167,7 @@
                     ${Title}
                 </label>
             </div>
-            <div class="pull-right action-buttons">
-                <a data-id=${Id} onclick="Edit(this)"><span class="glyphicon glyphicon-pencil"></span></a>
-                
+            <div class="pull-right action-buttons">                
                 <a data-id=${Id} onclick="ConfirmDelete(this)"><span class="glyphicon glyphicon-trash"></span></a>
             </div>
         </li>
