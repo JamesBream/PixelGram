@@ -164,33 +164,36 @@ def addNewPost():
         _description = request.form['inputDescription']
         _user = session.get('user')
         _filePath = request.form['filePath']
+        
+        if _title and filePath:
+            print (_title, " ", _description, " ", _user)
 
-        print (_title, " ", _description, " ", _user)
+            # Connect to MySQL, set cursor and call proc
+            cur = mysql.connection.cursor()
+            cur.callproc('sp_newPost', (_title, _description, _user, _filePath))        
+            # Fetch from cursor
+            rv = cur.fetchall()
 
-        # Connect to MySQL, set cursor and call proc
-        cur = mysql.connection.cursor()
-        cur.callproc('sp_newPost', (_title, _description, _user, _filePath))        
-        # Fetch from cursor
-        rv = cur.fetchall()
+            if len(rv) is 0:
+                # Commit the post
+                mysql.connection.commit()
 
-        if len(rv) is 0:
-            # Commit the post
-            mysql.connection.commit()
+                # Resize uploaded image 
+                devices = resizr.ResizeForAll(_filePath)
 
-            # Resize uploaded image 
-            devices = resizr.ResizeForAll(_filePath)
+                # Add resized image paths to database
+                cur.execute("SELECT post_id FROM tbl_post WHERE post_file_path = %s", (_filePath,))
+                postid = cur.fetchall()
 
-            # Add resized image paths to database
-            cur.execute("SELECT post_id FROM tbl_post WHERE post_file_path = %s", (_filePath,))
-            postid = cur.fetchall()
-            
-            for device in devices:
-                cur.execute("INSERT INTO tbl_postdevices (post_id, device_id) VALUES (%s, %s)", (postid[0][0], device))
-                
-            mysql.connection.commit()
-            return redirect('/userHome')
+                for device in devices:
+                    cur.execute("INSERT INTO tbl_postdevices (post_id, device_id) VALUES (%s, %s)", (postid[0][0], device))
+
+                mysql.connection.commit()
+                return redirect('/userHome')
+            else:
+                return render_template('error.html', error = 'An error occurred!')
         else:
-            return render_template('error.html', error = 'An error occurred!')
+            return render_template('error.html', error = 'Please enter a title and choose an image to upload.')
     else:
         return render_template('error.html', error = 'Unauthorised Access!')
         
