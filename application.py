@@ -5,7 +5,7 @@
 #####################
 
 # Includes
-import os, uuid
+import os, uuid, re
 
 from flask import Flask, render_template, json, redirect, session, request
 from flask.ext.mysqldb import MySQL
@@ -70,25 +70,30 @@ def signUp():
     
         # Validate received values
         if _name and _email and _password:
-            
-            # Contact MySQL and set cursor
-            # MySQLdb handles opening and closing the connection as needed
-            cur = mysql.connection.cursor()
-        
-            # We need to hash a salted password to store it securely
-            _hashed_password = generate_password_hash(_password)
-        
-            # Call MySQL procedure to create user
-            cur.callproc('sp_createUser', (_name, _email, _hashed_password))
-        
-            # Fetch from cursor
-            rv = cur.fetchall()
-            cur.close()
-            if len(rv) is 0:
-                mysql.connection.commit()
-                return json.dumps({'success':'User create success! You may now log in.'})
+            print(_email)
+            if re.match(r"[^@\s]+@[^@\s]+\.[a-zA-Z0-9]+$", _email):
+                print("Matched regex!")
+                # Contact MySQL and set cursor
+                # MySQLdb handles opening and closing the connection as needed
+                cur = mysql.connection.cursor()
+
+                # We need to hash a salted password to store it securely
+                _hashed_password = generate_password_hash(_password)
+
+                # Call MySQL procedure to create user
+                cur.callproc('sp_createUser', (_name, _email, _hashed_password))
+
+                # Fetch from cursor
+                rv = cur.fetchall()
+                cur.close()
+                if len(rv) is 0:
+                    mysql.connection.commit()
+                    return json.dumps({'success':'User create success! You may now log in.'})
+                else:
+                    return json.dumps({'error':str(rv[0])})
             else:
-                return json.dumps({'error':str(rv[0])})
+                print("Didn't match regex!")
+                return json.dumps({'error':'Error: Enter the required fields'})
         else:
             return json.dumps({'error':'Error: Enter the required fields'})
         
