@@ -351,7 +351,10 @@ def upload():
     
 @application.route('/showFeed')
 def showFeed():
-    return render_template('feed.html')
+    if session.get('user'):
+        return render_template('feed.html')
+    else:
+        return render_template('error.html', error = 'Please Login to access the feed.')
 
 @application.route('/getAllPosts')
 def getAllPosts():
