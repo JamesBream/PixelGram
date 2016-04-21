@@ -30,6 +30,7 @@ mysql.init_app(application)
 
 # Define uploads folder and allowed file types - Should not be changed for now!
 application.config['UPLOAD_FOLDER'] = 'static/uploads'
+app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024
 ALLOWED_EXTENSIONS = set(['jpg'])
 
 # Check the uploads folder exists, otherwise create it
