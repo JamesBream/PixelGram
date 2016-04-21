@@ -165,7 +165,7 @@ def addNewPost():
         _user = session.get('user')
         _filePath = request.form['filePath']
         
-        if _title and filePath:
+        if _title and _filePath:
             print (_title, " ", _description, " ", _user)
 
             # Connect to MySQL, set cursor and call proc
